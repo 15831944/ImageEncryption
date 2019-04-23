@@ -71,7 +71,7 @@ namespace ImageEncryption_WPF
                 if ((bool)InvokeDialog.ShowDialog(this))
                 {
                     var newPath = InvokeDialog.FileName;
-                    ImageHelper.EncryptFile(Path, newPath);
+                    ImageHelper.EncryptFile2(Path, newPath);
                     MessageBox.Show(this, "导出完成");
                 }
             }

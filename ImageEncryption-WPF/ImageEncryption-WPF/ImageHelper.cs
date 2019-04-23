@@ -10,7 +10,17 @@ namespace ImageEncryption_WPF
         /// <summary>
         /// 加密数值
         /// </summary>
-        private static readonly int Key = 134;
+        private static readonly int KeyR = 134;
+
+        /// <summary>
+        /// 加密数值
+        /// </summary>
+        private static readonly int KeyG = 34;
+
+        /// <summary>
+        /// 加密数值
+        /// </summary>
+        private static readonly int KeyB = 200;
 
         /// <summary>
         /// 图片加密
@@ -43,22 +53,22 @@ namespace ImageEncryption_WPF
         private static Color PixelEncryption(Color color)
         {
             var a = color.A;
-            var r = color.R + Key;
+            var r = color.R + KeyR;
+            var g = color.G + KeyG;
+            var b = color.B + KeyB;
             if (r > 255)
             {
                 r = r - 256;
             }
-            var g = color.G - Key;
-            if (g < 0)
+            if (g > 255)
             {
-                g = 256 + g;
+                g = g - 256;
             }
-            var b = color.B + Key;
             if (b > 255)
             {
                 b = b - 256;
             }
-            return Color.FromArgb(a, r, g, b); ;
+            return Color.FromArgb(a, r, g, b);
         }
     }
 }

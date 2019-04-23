@@ -63,6 +63,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CmdHelper.cs" />
     <Compile Include="DEncrypt4ImageHelper.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
