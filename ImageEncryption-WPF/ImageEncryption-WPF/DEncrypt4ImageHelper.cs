@@ -23,17 +23,11 @@ namespace ImageEncryption_WPF
         #region 加密方法 图片加密
 
         /// <summary>
-
         /// 图片加密
-
         /// </summary>
-
         /// <param name="filePath">源文件</param>
-
         /// <param name="savePath">保存为文件名称</param>
-
         /// <param name="keyStr">密钥</param>
-
         public static void EncryptFile(string filePath, string savePath, string keyStr)
 
         {
@@ -122,17 +116,11 @@ namespace ImageEncryption_WPF
         #region 解密方法 图片解密
 
         /// <summary>
-
         /// 图片解密
-
         /// </summary>
-
         /// <param name="filePath">源文件</param>
-
         /// <param name="savePath">保存文件</param>
-
         /// <param name="keyStr">密钥</param>
-
         public static void DecryptFile(string filePath, string savePath, string keyStr)
 
         {
