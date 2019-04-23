@@ -1,74 +1,109 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace ImageEncryption_WPF
 {
+    /// <summary>
+    /// 图片像素修改
+    /// </summary>
     class ImageHelper
     {
         /// <summary>
-        /// 加密数值
+        /// 加密秘钥
         /// </summary>
-        private static readonly int KeyR = 134;
-
+        private static readonly int Key = 13443521;
+        
         /// <summary>
-        /// 加密数值
+        /// 进度回调事件
         /// </summary>
-        private static readonly int KeyG = 34;
-
-        /// <summary>
-        /// 加密数值
-        /// </summary>
-        private static readonly int KeyB = 200;
-
+        public ExportEventHandler ExportEventHander;
         /// <summary>
         /// 图片加密
         /// </summary>
         /// <param name="filePath">源文件</param>
         /// <param name="savePath">保存为文件名称</param>
-        public static void EncryptFile(string filePath, string savePath)
+        public Bitmap Encrypt(Bitmap bitmap)
         {
-            Bitmap bitmap = new Bitmap(filePath);
+            //Bitmap bitmap = new Bitmap(filePath);
             Bitmap newImg = bitmap.Clone(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            for (int i = 0; i < bitmap.Width; i++)
+            int Width = bitmap.Width;
+            int Height = bitmap.Height;
+            //加密
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            int[] list = GetRandomIntValues(Width * Height);
+            watch.Stop();
+            Console.WriteLine(watch.Elapsed.TotalSeconds);      //记录时间
+            for (int i = 0; i < list.Length; i++)
             {
-                for (int j = 0; j < bitmap.Height; j++)
-                {
-                    //获取该点的像素的RGB的颜色
-                    Color color = bitmap.GetPixel(i, j);
-                    newImg.SetPixel(i, j, PixelEncryption(color));
-                }
+                newImg.SetPixel((i % Width), (i / Width), bitmap.GetPixel((list[i] % Width), (list[i] / Width)));
+                //ExportEventHander?.Invoke(i, new EventArgs());
             }
-
-            newImg.MakeTransparent(Color.White);
-            newImg.Save(savePath);
+            //newImg.MakeTransparent(Color.White);
+            //newImg.Save(savePath);
+            return newImg;
         }
 
         /// <summary>
-        /// 颜色加密
+        /// 图片解密
         /// </summary>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        private static Color PixelEncryption(Color color)
+        /// <param name="filePath"></param>
+        /// <param name="savePath"></param>
+        public Bitmap Decrypt(Bitmap bitmap)
         {
-            var a = color.A;
-            var r = color.R + KeyR;
-            var g = color.G + KeyG;
-            var b = color.B + KeyB;
-            if (r > 255)
+            //Bitmap bitmap = new Bitmap(filePath);
+            Bitmap newImg = bitmap.Clone(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            int Width = bitmap.Width;
+            int Height = bitmap.Height;
+            //加密
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            int[] list = GetRandomIntValues(Width * Height);
+            watch.Stop();
+            Console.WriteLine(watch.Elapsed.TotalSeconds);      //记录时间
+            for (int i = 0; i < list.Length; i++)
             {
-                r = r - 256;
+                newImg.SetPixel((list[i] % Width), (list[i] / Width), bitmap.GetPixel((i % Width), (i / Width)));
+                //ExportEventHander?.Invoke(i, new EventArgs());
             }
-            if (g > 255)
+            //newImg.MakeTransparent(Color.White);
+            //newImg.Save(savePath);
+            return newImg;
+        }
+
+        /// <summary>
+        /// 获取加密序列
+        /// </summary>
+        /// <param name="expectedCouont"></param>
+        /// <returns></returns>
+        private static int[] GetRandomIntValues(int expectedCouont)
+        {
+            Dictionary<int, int> container = new Dictionary<int, int>(expectedCouont);
+            Random r = new Random(Key);
+            while (container.Count < expectedCouont)
             {
-                g = g - 256;
+                int value = r.Next(0, expectedCouont);
+                if (!container.ContainsKey(value))
+                {
+                    container.Add(value, value);
+                }
             }
-            if (b > 255)
-            {
-                b = b - 256;
-            }
-            return Color.FromArgb(a, r, g, b);
+            int[] result = new int[expectedCouont];
+            container.Values.CopyTo(result, 0);
+            return result;
         }
     }
+
+    
+    /// <summary>
+    /// 导出进度事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    public delegate void ExportEventHandler(object sender, EventArgs e);
 }

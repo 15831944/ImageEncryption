@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ImageEncryption_WPF
 {
+    /// <summary>
+    /// 把压缩文件和图片和文件合一，压缩文件里存真正的图片文件数据
+    /// </summary>
     class CmdHelper
     {
         public static void XX()
