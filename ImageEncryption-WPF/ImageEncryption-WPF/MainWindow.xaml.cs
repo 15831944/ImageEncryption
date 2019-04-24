@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,11 +31,16 @@ namespace ImageEncryption_WPF
             InitializeComponent();
 
             progressBar.Visibility = Visibility.Collapsed;
+
+            imageHelper.ExportEventHander += ProcessChanged;
+            imageHelper.EndEventHander += EncryptDecryptEnd;
+
         }
 
         private string Path = string.Empty;
 
         private Bitmap bitmap = null;
+        private ImageHelper imageHelper = new ImageHelper();
 
         /// <summary>选择文件</summary>
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -67,6 +73,8 @@ namespace ImageEncryption_WPF
             }
         }
 
+        #region 加解密
+        /// <summary>加密</summary>
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             try
@@ -83,22 +91,23 @@ namespace ImageEncryption_WPF
                 {
                     MessageBox.Show(this, "请确认图片已加载");
                 }
-                //progressBar.Minimum = 1;
-                //progressBar.Maximum = bitmap.Width* bitmap.Height;
+
                 progressBar.Visibility = Visibility.Visible;
-                ImageHelper imageHelper = new ImageHelper();
-                imageHelper.ExportEventHander += ProcessChanged;
-                bitmap = imageHelper.Encrypt(bitmap);
-                progressBar.Visibility = Visibility.Collapsed;
-                UpdateImage();
-                MessageBox.Show(this, "加密完成");
+                UpdateButton(false);
+                //MemoryStream ms = new MemoryStream();
+                //bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                //byte[] bytes = ms.GetBuffer();
+                //ms.Close();
+                Thread thread = new Thread(new ParameterizedThreadStart(imageHelper.Encrypt));
+                thread.Start(bitmap);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "加密完成:" + ex.Message);
+                MessageBox.Show(this, "加密失败:" + ex.Message);
             }
         }
 
+        /// <summary>解密</summary>
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             try
@@ -115,15 +124,11 @@ namespace ImageEncryption_WPF
                 {
                     MessageBox.Show(this, "请确认图片已加载");
                 }
-                //progressBar.Minimum = 1;
-                //progressBar.Maximum = bitmap.Width * bitmap.Height;
+
                 progressBar.Visibility = Visibility.Visible;
-                ImageHelper imageHelper = new ImageHelper();
-                imageHelper.ExportEventHander += ProcessChanged;
-                bitmap = imageHelper.Decrypt(bitmap);
-                progressBar.Visibility = Visibility.Collapsed;
-                UpdateImage();
-                MessageBox.Show(this, "解密完成");
+                UpdateButton(false);
+                Thread thread = new Thread(new ParameterizedThreadStart(imageHelper.Decrypt));
+                thread.Start(bitmap);
             }
             catch (Exception ex)
             {
@@ -131,6 +136,10 @@ namespace ImageEncryption_WPF
             }
         }
 
+
+        #endregion
+
+        /// <summary>导出文件</summary>
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             try
@@ -165,32 +174,93 @@ namespace ImageEncryption_WPF
                 MessageBox.Show(this, "导出失败:" + ex.Message);
             }
         }
-        
-        /// <summary>
-        /// 更新图片展示
-        /// </summary>
+
+        #region 界面状态变化
+        /// <summary>更新图片展示</summary>
         private void UpdateImage()
         {
-            MemoryStream ms = new MemoryStream();
-            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-            byte[] bytes = ms.GetBuffer();  //byte[]   bytes=   ms.ToArray(); 这两句都可以
-            ms.Close();
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.StreamSource = new MemoryStream(bytes);
-            image.EndInit();
-            image1.Source = image;
+            this.image1.Dispatcher.BeginInvoke((ThreadStart)delegate
+            {
+                MemoryStream ms = new MemoryStream();
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                byte[] bytes = ms.GetBuffer();  //byte[]   bytes=   ms.ToArray(); 这两句都可以
+                ms.Close();
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.StreamSource = new MemoryStream(bytes);
+                image.EndInit();
+                image1.Source = image;
+            });
         }
 
+        /// <summary>
+        /// 更新按钮状态
+        /// </summary>
+        /// <param name="isEnabled"></param>
+        private void UpdateButton(bool isEnabled)
+        {
 
+            this.button1.Dispatcher.BeginInvoke((ThreadStart)delegate
+            {
+                button1.IsEnabled = isEnabled;
+            });
 
-        #region 进度条
-        
+            this.button2.Dispatcher.BeginInvoke((ThreadStart)delegate
+            {
+                button2.IsEnabled = isEnabled;
+            });
+
+            this.button3.Dispatcher.BeginInvoke((ThreadStart)delegate
+            {
+                button3.IsEnabled = isEnabled;
+            });
+
+            this.button4.Dispatcher.BeginInvoke((ThreadStart)delegate
+            {
+                button4.IsEnabled = isEnabled;
+            });
+        }
+
+        #endregion
+
+        #region 进度
+
         private void ProcessChanged(object sender, EventArgs e)
         {
-            progressBar.Value = (int)sender;
+            //Dispatcher.BeginInvoke(new Action(delegate
+            //{
+            //    progressBar.Value = (int)sender;
+            //}));
+            var num = (int)sender;
+            this.progressBar.Dispatcher.BeginInvoke((ThreadStart)delegate { this.progressBar.Value = num; });
         }
 
+        /// <summary>
+        /// 加解密结束
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EncryptDecryptEnd(object sender, EventArgs e)
+        {
+            try
+            {
+                if ((bool)sender)
+                {
+                    bitmap = Model.Instance.Bitmap;
+                }
+                this.progressBar.Dispatcher.BeginInvoke((ThreadStart)delegate
+                {
+                    progressBar.Visibility = Visibility.Collapsed;
+                    progressBar.Value = 0;
+                });
+                UpdateImage();
+                UpdateButton(true);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
         #endregion
     }
 }

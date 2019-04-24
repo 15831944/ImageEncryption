@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -22,59 +25,106 @@ namespace ImageEncryption_WPF
         /// 进度回调事件
         /// </summary>
         public ExportEventHandler ExportEventHander;
+
+
+        /// <summary>
+        /// 完成回调事件
+        /// </summary>
+        public ExportEventHandler EndEventHander;
+
         /// <summary>
         /// 图片加密
         /// </summary>
         /// <param name="filePath">源文件</param>
         /// <param name="savePath">保存为文件名称</param>
-        public Bitmap Encrypt(Bitmap bitmap)
+        public void Encrypt(object obj)
         {
-            //Bitmap bitmap = new Bitmap(filePath);
-            Bitmap newImg = bitmap.Clone(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            int Width = bitmap.Width;
-            int Height = bitmap.Height;
-            //加密
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            int[] list = GetRandomIntValues(Width * Height);
-            watch.Stop();
-            Console.WriteLine(watch.Elapsed.TotalSeconds);      //记录时间
-            for (int i = 0; i < list.Length; i++)
+            try
             {
-                newImg.SetPixel((i % Width), (i / Width), bitmap.GetPixel((list[i] % Width), (list[i] / Width)));
-                //ExportEventHander?.Invoke(i, new EventArgs());
+                //Bitmap bitmap = new Bitmap(filePath);
+                //Bitmap newImg = bitmap.Clone(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                //byte[] bytelist = (byte[])obj;
+                //MemoryStream ms1 = new MemoryStream(bytelist);
+                //Bitmap bitmap = (Bitmap)Image.FromStream(ms1);
+                //ms1.Close();
+                Model.Instance.Bitmap = null;
+                Bitmap bitmap = new Bitmap((Bitmap)obj);
+                int Width = bitmap.Width;
+                int Height = bitmap.Height;
+                int expectedCouont = Width * Height;
+                Bitmap newImg = new Bitmap(Width, Height);
+                //加密
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                int[] list = GetRandomIntValues(expectedCouont);
+                watch.Stop();
+                Console.WriteLine(watch.Elapsed.TotalSeconds);      //记录时间
+                int num = -1;
+                for (int i = 0; i < list.Length; i++)
+                {
+                    newImg.SetPixel((i % Width), (i / Width), bitmap.GetPixel((list[i] % Width), (list[i] / Width)));
+                    var process = i * 100 / expectedCouont;
+                    if (process > num)
+                    {
+                        num = process;
+                        ExportEventHander?.Invoke(num, new EventArgs());
+                    }
+                }
+                //MessageBox.Show("加密完成");
+                Model.Instance.Bitmap = newImg;
+                EndEventHander?.Invoke(true, new EventArgs());
+                //newImg.MakeTransparent(Color.White);
+                //newImg.Save(savePath);
+                //return newImg;
             }
-            //newImg.MakeTransparent(Color.White);
-            //newImg.Save(savePath);
-            return newImg;
+            catch(Exception ex)
+            {
+                MessageBox.Show("加密失败:" + ex.Message);
+                EndEventHander?.Invoke(false, new EventArgs());
+            }
         }
 
         /// <summary>
         /// 图片解密
         /// </summary>
-        /// <param name="filePath"></param>
-        /// <param name="savePath"></param>
-        public Bitmap Decrypt(Bitmap bitmap)
+        /// <param name="obj">Bitmap</param>
+        public void Decrypt(object obj)
         {
-            //Bitmap bitmap = new Bitmap(filePath);
-            Bitmap newImg = bitmap.Clone(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            int Width = bitmap.Width;
-            int Height = bitmap.Height;
-            //加密
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            int[] list = GetRandomIntValues(Width * Height);
-            watch.Stop();
-            Console.WriteLine(watch.Elapsed.TotalSeconds);      //记录时间
-            for (int i = 0; i < list.Length; i++)
+            try
             {
-                newImg.SetPixel((list[i] % Width), (list[i] / Width), bitmap.GetPixel((i % Width), (i / Width)));
-                //ExportEventHander?.Invoke(i, new EventArgs());
+                Model.Instance.Bitmap = null;
+                Bitmap bitmap = new Bitmap((Bitmap)obj);
+                int Width = bitmap.Width;
+                int Height = bitmap.Height;
+                int expectedCouont = Width * Height;
+                Bitmap newImg = new Bitmap(Width, Height);
+                //加密
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                int[] list = GetRandomIntValues(expectedCouont);
+                watch.Stop();
+                Console.WriteLine(watch.Elapsed.TotalSeconds);      //记录时间
+                int num = -1;
+                for (int i = 0; i < list.Length; i++)
+                {
+                    newImg.SetPixel((list[i] % Width), (list[i] / Width), bitmap.GetPixel((i % Width), (i / Width)));
+                    var process = i * 100 / expectedCouont;
+                    if (process > num)
+                    {
+                        num = process;
+                        ExportEventHander?.Invoke(num, new EventArgs());
+                    }
+                }
+                //MessageBox.Show("解密完成");
+                Model.Instance.Bitmap = newImg;
+                EndEventHander?.Invoke(true, new EventArgs());
             }
-            //newImg.MakeTransparent(Color.White);
-            //newImg.Save(savePath);
-            return newImg;
-        }
+            catch (Exception ex)
+            {
+                MessageBox.Show("解密失败:" + ex.Message);
+                EndEventHander?.Invoke(false, new EventArgs());
+            }
+}
 
         /// <summary>
         /// 获取加密序列

@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="ImageEncryption-WPF.exe" version="1.0.0.1" publicKeyToken="1bd5afbffc19b017" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="ImageEncryption-WPF" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="ImageEncryption-WPF.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC 清单选项
+         若想要更改 Windows 用户帐户控制级别，请
+         将 requestedExecutionLevel 节点替换为下述某项。
+
+       <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+       <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+       <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+        若想要使用文件和注册表虚拟化以实现向后
+        兼容，请删除 requestedExecutionLevel 节点。
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ImageEncryption-WPF.exe" size="19904">
+      <assemblyIdentity name="ImageEncryption-WPF" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>LhD4JRj7skXuDjnQ2bhU/siAywuJhZ//zrETviaFR4M=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="ImageEncryption-WPF.exe.config" size="187">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ji8aT6+d4QyGsLkWKNdTYyE7mNtRXIN9y+Xmyl/UOJU=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=IFLYTEK\chenliu6" issuerKeyHash="bea8ef0b2e676350f993034e0a6abe993d7cba0e" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>8YNTl2uR7Je/fFv9b1T4HhbJSWCY2+3GFek8md67ReI=</DigestValue></Reference></SignedInfo><SignatureValue>DvZ++sajSErsnFsIuYJfjcIjAQrfs8sCTxk+Xvnop0855fVvxkvQ6hXv8ipY3GUVGE04ADLQNMFZqky5ci0WLuaE3LkZoOhCjCe3yjz09S9+69QbN9c1iKcltbkLylbAVrPJgRvKxMWuPPQXMdJbIW3hXrZ7wrMQeO+KBuaDy7M=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>v2bUbF4iM3EF81yk95gC6M+5a0RVtsuY1l2sQfhbpzLDw4E1ZgfnAG/CH6L59zxa+IhQgQomNCCteYwlJsFvQT8OwR7Tpu4aYsdH3g3AyraUHzIu4v5q58l2xy6ynr3rCJBiVOb0hnUebSd5WxS9e2rcuMgy0+usV0cZc+AcO1U=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="e245bbde993ce915c6eddb986049c9161ef8546ffd5b7cbf97ec916b975383f1" Description="" Url=""><as:assemblyIdentity name="ImageEncryption-WPF.exe" version="1.0.0.1" publicKeyToken="1bd5afbffc19b017" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=IFLYTEK\chenliu6</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>6UFpPEOuYikaVg19t/rss5NeX/RPRH9G5JL/N44kV5A=</DigestValue></Reference></SignedInfo><SignatureValue>rSIAST3Czqo7hwC3bWfCc28Vya4XWHcV4PrOiytknXzEvhdgerAcwgj3sVUUd+AizCIMJUdVp4oJQWtjl6k6nHBiJFJ48tXnzNc3aCiT2h0qlekSZt0QHBOsPU3wc1EnIFKq2UdVglT0ch1wMXijJW/a2QVxq1zRTDncgv60AkA=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>v2bUbF4iM3EF81yk95gC6M+5a0RVtsuY1l2sQfhbpzLDw4E1ZgfnAG/CH6L59zxa+IhQgQomNCCteYwlJsFvQT8OwR7Tpu4aYsdH3g3AyraUHzIu4v5q58l2xy6ynr3rCJBiVOb0hnUebSd5WxS9e2rcuMgy0+usV0cZc+AcO1U=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB2TCCAUKgAwIBAgIQL+wSqAmrr4BIoOfx/pmKgjANBgkqhkiG9w0BAQsFADArMSkwJwYDVQQDHiAASQBGAEwAWQBUAEUASwBcAGMAaABlAG4AbABpAHUANjAeFw0xOTA0MjQwMzEwMDlaFw0yMDA0MjMwOTEwMDlaMCsxKTAnBgNVBAMeIABJAEYATABZAFQARQBLAFwAYwBoAGUAbgBsAGkAdQA2MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/ZtRsXiIzcQXzXKT3mALoz7lrRFW2y5jWXaxB+FunMsPDgTVmB+cAb8Ifovn3PFr4iFCBCiY0IK15jCUmwW9BPw7BHtOm7hpix0feDcDKtpQfMi7i/mrnyXbHLrKevesIkGJU5vSGdR5tJ3lbFL17aty4yDLT66xXRxlz4Bw7VQIDAQABMA0GCSqGSIb3DQEBCwUAA4GBADaEh0ClRQSSlH60uglM6ZlC40WapmDa34DNg2Aq124xQMBE+6SV6lwCSt58ltli02KPPLLpBb1TD23JpoKDPrwhb89+GdY3QVN/aFx0f1HhG5bTz7xaaR3GQOQR9Cun//XYvFHjXWnN/OYfGsT5z+KH2Ad3XatDl3riPZb8bM5K</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
